@@ -1,0 +1,55 @@
+library(karyoploteR)
+
+#open file.tsv obtained from nanopolish analysis after calculating methylation frecuency from 0 to 1 from the log data
+Control <- read.table(file ="/path/to/my/file.tsv") 
+
+CORT <- read.table(file ="/path/to/my/file.tsv") 
+  
+names <- c("chromosome", "start", "end", "num_motifs_in_group", "called_sites", "called_sites_methylated", "methylated_frequency", "group_sequence")
+
+CORT <- CORT[-1,]
+Control <- Control[-1,]
+
+#change seqnames
+colnames(Control) <- names  
+
+colnames(CORT) <- names 
+
+
+
+#create a newcol in CORT which is a repetition of chr durante todas las rows of CORT
+Control$newcol <- rep("chr",nrow(Control))
+Control$chrcol <- paste(Control$newcol, Control$chromosome, sep="")
+Control$chromosome <- Control$chrcol
+# fusionar lo anterior para hacerlo mas eficiente
+CORT$chromosome <- paste(rep("chr",nrow(CORT)), CORT$chromosome, sep = "")
+
+  
+#to convert a factor to an integer/numeric without loss of information
+Control$start<-as.numeric(paste(Control$start))
+Control$end<-as.numeric(paste(Control$end))
+methylated<-as.numeric(paste(Control$methylated_frequency))
+ 
+
+CORT$start<-as.numeric(paste(CORT$start))
+CORT$end<-as.numeric(paste(CORT$end))
+methylated<-as.numeric(paste(CORT$methylated_frequency))
+
+#crear Granges objects
+library(GenomicRanges)
+
+#crete GRanges datasets
+gr1 <- GRanges(seqnames = Control$chromosome,
+              ranges = IRanges(start = Control$start, end= Control$end))
+
+gr2 <- GRanges(seqnames = CORT$chromosome,
+               ranges = IRanges(start = CORT$start, end= CORT$end))
+
+
+
+
+#plot
+kp <- plotKaryotype(genome="mm10", plot.type=6, main="Methylation density", ideogram.plotter = NULL, cex=1)
+kp <- kpPlotDensity(kp, gr1, window.size = 0.5e6, data.panel="ideogram", col="#3388FF", border="#3388FF", r0=0.5, r1=1)
+kp <- kpPlotDensity(kp, gr2, window.size = 0.5e6, data.panel="ideogram", col="red", border="red", r0=0.5, r1=0)
+legend(x = "bottomright", fill = c("#3388FF", "red"), legend = c("Control", "CORT"))
