@@ -1,38 +1,23 @@
+library(GenomicRanges)
+library(karyoploteR)
+library(stringr)
 
-#!bin/R
-
-#functions
+#FUNCTIONS
 
 creategranges<-function(gr){
   GR_repeats <- GRanges(seqnames = gr$V5,
                         ranges = IRanges(start = gr$genoStart, end=gr$genoName ))
 }
   
-
-
-
-
-ibrary(ggplot2)
+#density in Y meth frec in X. I want to invet axix don't know how
+Represent<-function(overlapdata){
 mydf<-data.frame(sample=factor(rep(c("Control", "CORT"), each=nrow(overlapdata))), methylationfrec=c(overlapdata$mu1, overlapdata$mu2))
 ggplot(mydf, aes(x=methylationfrec, color=sample)) +
   geom_density()
+  }
+
+
   
-  
-  #try to do everything with fuctions
-  
-  #different regions to represent
-  
-  
-  > levels(USCCtable$V13)
- [1] "Alu"            "B2"             "B4"             "centr"          "CR1"           
- [6] "Deu"            "DNA"            "DNA?"           "Dong-R4"        "ERV1"          
-[11] "ERV1?"          "ERVK"           "ERVK?"          "ERVL"           "ERVL-MaLR"     
-[16] "ERVL?"          "Gypsy"          "Gypsy?"         "hAT"            "hAT-Blackjack" 
-[21] "hAT-Charlie"    "hAT-Tip100"     "hAT-Tip100?"    "hAT?"           "Helitron"      
-[26] "Helitron?"      "ID"             "L1"             "L1?"            "L2"            
-[31] "Low_complexity" "LTR"            "LTR?"           "MIR"            "MuDR"          
-[36] "MULE-MuDR"      "Other"          "Penelope?"      "PiggyBac"       "PiggyBac?"     
-[41] "RNA"            "rRNA"           "RTE-BovB"       "RTE-X"          "Satellite"     
-[46] "scRNA"          "Simple_repeat"  "SINE?"          "snRNA"          "srpRNA"        
-[51] "TcMar"          "TcMar-Mariner"  "TcMar-Pogo"     "TcMar-Tc2"      "TcMar-Tigger"  
-[56] "TcMar?"         "tRNA"           "Unknown"        "Y-chromosome"  
+ 
+overlapingIAP<-dmlTest[queryHits(findOverlaps(GR_IAP, gr_dml, ignore.strand=TRUE)),]
+
