@@ -1,4 +1,6 @@
 library(stringr)
+library(GenomicRanges)
+
 
 UCSCtable<-read.table(file="/data/cephfs/punim1048/LINEandmore/RepeatmaskerGenomes/repeatmaskertrackUCSC.wholetable", header=T)
 
@@ -11,4 +13,19 @@ Repbaseheader<-c("SW score", "perc div.", "perc ins.", "query sequence","chr", "
 LINE<-UCSCtable[str_detect(USCCtable$repClass,"LINE"),]
 
 L1<-UCSCtable[USCCtable$repFamily==L1,]
+
+gr_dml <- GRanges(seqnames = dmlTest$chr,
+                  ranges = IRanges(start = dmlTest$pos, dmlTest$pos))
+                  
+creategranges<-function(query, subject){
+  query$genoStart<-as.numeric(paste(query$genoStart))
+  query$genoEnd<-as.numeric(paste(query$genoEnd))
+  GR_repeats <- GRanges(seqnames = query$genoName,
+                        ranges = IRanges(start = query$genoStart, end=query$genoEnd ))
+}
+
+GR_line<-creategranges(LINE)
+
+
+overlapingLINE<-dmlTest[queryHits(findOverlaps(GR_line, gr_dml, ignore.strand=TRUE)),]
 
