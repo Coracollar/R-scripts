@@ -1,6 +1,5 @@
 library(GenomicRanges)
-library(karyoploteR)
-library(stringr)
+library(dplyr)
 
 #FUNCTIONS
 
@@ -19,6 +18,7 @@ dmls_gr<-GRanges(seqnames = subject$chr,
 GR_IAP<-creategranges(IAP)
 
 overlapingIAP<-dmlTest[queryHits(findOverlaps(GR_IAP, gr_dml, ignore.strand=TRUE)),]
+overlapingIAP<-distinct(overlapingIAP)
 
 #density in Y meth frec in X. I want to invet axix don't know how
 represent<-function(overlapdata){
