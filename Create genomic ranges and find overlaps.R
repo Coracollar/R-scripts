@@ -1,4 +1,5 @@
 library(GenomicRanges)
+library(dplyr)
 
 #obtain my data to analyse
 dmlTest<-read.table(file="/data/cephfs/punim1048/RStudio/Results/dmlTest_Control-CORT.tsv", header=T)
@@ -46,9 +47,12 @@ GR_bed<-creategrangesbed(bed)
 GR_UCSCtable<-creategrangesUCSCtable(UCSCtable)
 
 #find overlaps
+#the subject is the one that has the information I am interested in.
+#the query has the coordanates I am interested in
 
+overlaps<-findOverlaps(query, subject, ignore.strand=TRUE)
 
-
-
-
+data<-dmlTest[subjectHits(findOverlaps(query, subject, ignore.strand=TRUE)),]
+#eliminate duplicated lines
+data<-distinct(data)
 
